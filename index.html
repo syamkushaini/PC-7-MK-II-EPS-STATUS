@@ -3,47 +3,41 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PC-7 Mk II EPS Management</title>
+    <title>PC-7 Mk II EPS Portal</title>
     <style>
         :root {
             --primary: #002344;
             --accent: #ffd700;
-            --svc-color: #2e7d32;
-            --us-color: #c62828;
-            --bg: #f4f7f9;
+            --svc-bg: #e8f5e9;
+            --svc-text: #2e7d32;
+            --us-bg: #ffebee;
+            --us-text: #c62828;
+            --card-shadow: 0 8px 30px rgba(0,0,0,0.12);
         }
 
-        body { font-family: 'Segoe UI', Tahoma, sans-serif; background: var(--bg); margin: 0; padding: 20px; }
+        body { font-family: 'Segoe UI', sans-serif; background: #f0f2f5; margin: 0; padding: 20px; color: #333; }
         .container { max-width: 1200px; margin: auto; }
-        
-        /* Header & Title */
-        .header { background: white; padding: 30px; border-radius: 20px 20px 0 0; text-align: center; border-bottom: 5px solid var(--accent); box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
-        h1 { margin: 0; color: var(--primary); font-size: 24px; letter-spacing: 1px; }
+        .header { background: white; padding: 30px; text-align: center; border-radius: 20px; box-shadow: var(--card-shadow); margin-bottom: 30px; border-top: 10px solid var(--primary); }
+        h1 { margin: 0; color: var(--primary); font-size: 24px; text-transform: uppercase; letter-spacing: 1px; }
 
-        /* Dashboard Shape Graphics */
-        .dashboard { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin: 20px 0; }
-        .stat-card { background: white; padding: 20px; border-radius: 15px; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.03); border: 1px solid #eee; transition: 0.3s; }
-        .stat-card:hover { transform: translateY(-3px); box-shadow: 0 6px 20px rgba(0,0,0,0.1); }
-        .val { font-size: 32px; font-weight: bold; display: block; color: var(--primary); }
-        .lbl { font-size: 12px; font-weight: bold; color: #888; text-transform: uppercase; }
+        /* Sort Button Styling */
+        th { padding: 15px; background: #f8f9fa; border-bottom: 2px solid #eee; cursor: pointer; transition: 0.2s; position: relative; font-size: 12px; text-transform: uppercase; color: #666; }
+        th:hover { background: #e9ecef; color: var(--primary); }
+        th::after { content: ' ↕'; font-size: 10px; opacity: 0.5; }
 
-        /* Editable Grid Styling */
-        .grid-container { background: white; padding: 25px; border-radius: 0 0 20px 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); overflow-x: auto; }
-        .edit-notif { background: #e3f2fd; color: #1976d2; padding: 10px 15px; border-radius: 8px; font-size: 14px; margin-bottom: 20px; font-weight: 600; display: inline-block; }
+        /* Table Design */
+        .table-container { background: white; border-radius: 20px; padding: 25px; box-shadow: var(--card-shadow); }
+        table { width: 100%; border-collapse: collapse; }
+        td { padding: 12px 15px; border-bottom: 1px solid #f0f0f0; font-size: 14px; }
+        tr:hover { background: #fafafa; }
         
-        table { width: 100%; border-collapse: separate; border-spacing: 0; }
-        th { background: #f8f9fa; padding: 15px; text-align: left; font-size: 13px; color: #555; border-bottom: 2px solid #eee; }
-        td { padding: 12px 15px; border-bottom: 1px solid #f0f0f0; font-size: 14px; outline: none; transition: 0.2s; }
+        /* Interactive Elements */
+        td[contenteditable="true"] { outline: none; transition: 0.2s; }
+        td[contenteditable="true"]:focus { background: #fffde7; border-left: 3px solid var(--accent); }
         
-        /* Interactive Edit State */
-        td[contenteditable="true"]:focus { background: #fffde7; border-bottom: 2px solid var(--accent); }
-        td[contenteditable="true"]:hover { background: #fafafa; cursor: pointer; }
-
-        /* Status Visuals */
-        .status-svc { color: var(--svc-color); font-weight: bold; }
-        .status-us { color: var(--us-color); font-weight: bold; }
-        
-        .btn-save { background: var(--primary); color: white; border: none; padding: 15px 30px; border-radius: 8px; font-weight: bold; cursor: pointer; float: right; margin-top: 20px; }
+        .status-pill { padding: 5px 12px; border-radius: 15px; font-size: 11px; font-weight: bold; }
+        .pill-svc { background: var(--svc-bg); color: var(--svc-text); }
+        .pill-us { background: var(--us-bg); color: var(--us-text); }
     </style>
 </head>
 <body>
@@ -53,73 +47,83 @@
         <h1>PC-7 Mk II EMERGENCY POWER SUPPLY STATUS</h1>
     </div>
 
-    <div class="dashboard">
-        <div class="stat-card">
-            <span class="val" id="total-count">25</span>
-            <span class="lbl">Total Inventory</span>
-        </div>
-        <div class="stat-card" style="border-top: 4px solid var(--svc-color);">
-            <span class="val" id="svc-count" style="color: var(--svc-color);">11</span>
-            <span class="lbl">Serviceable</span>
-        </div>
-        <div class="stat-card" style="border-top: 4px solid var(--us-color);">
-            <span class="val" id="us-count" style="color: var(--us-color);">14</span>
-            <span class="lbl">Unserviceable</span>
-        </div>
-    </div>
-
-    <div class="grid-container">
-        <div class="edit-notif">✏️ Click any cell to edit data directly</div>
-        <table id="epsGrid">
+    <div class="table-container">
+        <p style="color: #1976d2; font-weight: bold; margin-bottom: 15px;">💡 Click table headers to SORT. Click cells to EDIT.</p>
+        <table id="epsTable">
             <thead>
                 <tr>
-                    <th>Serial No</th>
-                    <th>Status (SVC/US)</th>
-                    <th>Date Due</th>
-                    <th>Aircraft No</th>
-                    <th>Remarks</th>
+                    <th onclick="sortTable(0)">No</th>
+                    <th onclick="sortTable(1)">EPS Serial No</th>
+                    <th onclick="sortTable(2)">Status</th>
+                    <th onclick="sortTable(3)">Date Due</th>
+                    <th onclick="sortTable(4)">Aircraft No</th>
+                    <th onclick="sortTable(5)">Remarks</th>
                 </tr>
             </thead>
             <tbody>
-                <tr><td>80379</td><td contenteditable="true" class="status-us">Unserviceable</td><td contenteditable="true">-</td><td contenteditable="true">M50-</td><td contenteditable="true">U/S (AS/B156//24) (AWD DMD 18/12/25)</td></tr>
-                <tr><td>80919</td><td contenteditable="true" class="status-svc">Serviceable</td><td contenteditable="true">06/04/2026</td><td contenteditable="true">M50-21</td><td contenteditable="true">-</td></tr>
-                <tr><td>80996</td><td contenteditable="true" class="status-svc">Serviceable</td><td contenteditable="true">17/08/2026</td><td contenteditable="true">M50-16</td><td contenteditable="true">-</td></tr>
-                <tr><td>81045</td><td contenteditable="true" class="status-us">Unserviceable</td><td contenteditable="true">-</td><td contenteditable="true">M50-</td><td contenteditable="true">U/S (AS/B171//24) (AWD DMD 28/10/24)</td></tr>
-                <tr><td>81046</td><td contenteditable="true" class="status-svc">Serviceable</td><td contenteditable="true">11/11/2026</td><td contenteditable="true">M50-01</td><td contenteditable="true">-</td></tr>
-                <tr><td>81262</td><td contenteditable="true" class="status-us">Unserviceable</td><td contenteditable="true">-</td><td contenteditable="true">M50-</td><td contenteditable="true">U/S (AS/B/111/25) (AWD DMD 02/09/25)</td></tr>
-                <tr><td>81308</td><td contenteditable="true" class="status-us">Unserviceable</td><td contenteditable="true">-</td><td contenteditable="true">M50-</td><td contenteditable="true">U/S (AS/B/055/25) (AWD DMD 13/06/25)</td></tr>
-                <tr><td>81322</td><td contenteditable="true" class="status-us">Unserviceable</td><td contenteditable="true">-</td><td contenteditable="true">M50-</td><td contenteditable="true">Sent to Nilai (Loan) (15/08/25)</td></tr>
-                <tr><td>81326</td><td contenteditable="true" class="status-us">Unserviceable</td><td contenteditable="true">-</td><td contenteditable="true">M50-</td><td contenteditable="true">U/S (AS/B/004/26)</td></tr>
+                <tr><td>01</td><td>80379</td><td><span class="status-pill pill-us" contenteditable="true">U/S</span></td><td contenteditable="true">-</td><td contenteditable="true">M50-</td><td contenteditable="true">AS/B156//24 (AWD DMD 18/12/25)</td></tr>
+                <tr><td>02</td><td>80919</td><td><span class="status-pill pill-svc" contenteditable="true">SVC</span></td><td contenteditable="true">06/04/2026</td><td contenteditable="true">M50-21</td><td contenteditable="true">-</td></tr>
+                <tr><td>03</td><td>80996</td><td><span class="status-pill pill-svc" contenteditable="true">SVC</span></td><td contenteditable="true">17/08/2026</td><td contenteditable="true">M50-16</td><td contenteditable="true">-</td></tr>
+                <tr><td>04</td><td>81045</td><td><span class="status-pill pill-us" contenteditable="true">U/S</span></td><td contenteditable="true">-</td><td contenteditable="true">M50-</td><td contenteditable="true">AS/B171//24 (AWD DMD 28/10/24)</td></tr>
+                <tr><td>05</td><td>81046</td><td><span class="status-pill pill-svc" contenteditable="true">SVC</span></td><td contenteditable="true">11/11/2026</td><td contenteditable="true">M50-01</td><td contenteditable="true">-</td></tr>
+                <tr><td>06</td><td>81262</td><td><span class="status-pill pill-us" contenteditable="true">U/S</span></td><td contenteditable="true">-</td><td contenteditable="true">M50-</td><td contenteditable="true">AS/B/111/25 (AWD DMD 02/09/25)</td></tr>
+                <tr><td>07</td><td>81308</td><td><span class="status-pill pill-us" contenteditable="true">U/S</span></td><td contenteditable="true">-</td><td contenteditable="true">M50-</td><td contenteditable="true">AS/B/055/25 (AWD DMD 13/06/25)</td></tr>
+                <tr><td>08</td><td>81322</td><td><span class="status-pill pill-us" contenteditable="true">U/S</span></td><td contenteditable="true">-</td><td contenteditable="true">M50-</td><td contenteditable="true">Sent to Nilai (Loan) (15/08/25)</td></tr>
+                <tr><td>09</td><td>81688</td><td><span class="status-pill pill-us" contenteditable="true">U/S</span></td><td contenteditable="true">-</td><td contenteditable="true">M50-</td><td contenteditable="true">AS/B/110/25 (AWD DMD 02/09/25)</td></tr>
+                <tr><td>10</td><td>81829</td><td><span class="status-pill pill-us" contenteditable="true">U/S</span></td><td contenteditable="true">-</td><td contenteditable="true">M50-</td><td contenteditable="true">AS/B/112/25 (AWD DMD 02/09/25)</td></tr>
+                <tr><td>11</td><td>83204</td><td><span class="status-pill pill-us" contenteditable="true">U/S</span></td><td contenteditable="true">-</td><td contenteditable="true">M50-</td><td contenteditable="true">AS/B109//25 (AWD DMD 11/05/25)</td></tr>
+                <tr><td>12</td><td>83210</td><td><span class="status-pill pill-us" contenteditable="true">U/S</span></td><td contenteditable="true">-</td><td contenteditable="true">M50-</td><td contenteditable="true">AS/B/148/25 (AWD DMD 24/11/25)</td></tr>
+                <tr><td>13</td><td>83218</td><td><span class="status-pill pill-svc" contenteditable="true">SVC</span></td><td contenteditable="true">04/12/2026</td><td contenteditable="true">M50-23</td><td contenteditable="true">-</td></tr>
+                <tr><td>14</td><td>83235</td><td><span class="status-pill pill-us" contenteditable="true">U/S</span></td><td contenteditable="true">-</td><td contenteditable="true">M50-</td><td contenteditable="true">AS/B169//24 (AWD DMD 28/10/24)</td></tr>
+                <tr><td>15</td><td>83236</td><td><span class="status-pill pill-us" contenteditable="true">U/S</span></td><td contenteditable="true">-</td><td contenteditable="true">M50-</td><td contenteditable="true">AS/B/075/25 (AWD DMD 11/08/25)</td></tr>
+                <tr><td>16</td><td>83241</td><td><span class="status-pill pill-svc" contenteditable="true">SVC</span></td><td contenteditable="true">22/12/2026</td><td contenteditable="true">M50-08</td><td contenteditable="true">-</td></tr>
+                <tr><td>17</td><td>83244</td><td><span class="status-pill pill-svc" contenteditable="true">SVC</span></td><td contenteditable="true">19/02/2026</td><td contenteditable="true">M50-07</td><td contenteditable="true">-</td></tr>
+                <tr><td>18</td><td>83411</td><td><span class="status-pill pill-svc" contenteditable="true">SVC</span></td><td contenteditable="true">08/07/2026</td><td contenteditable="true">M50-02</td><td contenteditable="true">-</td></tr>
+                <tr><td>19</td><td>83413</td><td><span class="status-pill pill-us" contenteditable="true">U/S</span></td><td contenteditable="true">-</td><td contenteditable="true">M50-</td><td contenteditable="true">AS/B108//25 (AWD DMD 12/08/25)</td></tr>
+                <tr><td>20</td><td>83438</td><td><span class="status-pill pill-us" contenteditable="true">U/S</span></td><td contenteditable="true">-</td><td contenteditable="true">M50-</td><td contenteditable="true">AS/B100//25 (AWD DMD 12/08/25)</td></tr>
+                <tr><td>21</td><td>83515</td><td><span class="status-pill pill-svc" contenteditable="true">SVC</span></td><td contenteditable="true">11/01/2027</td><td contenteditable="true">M50-05</td><td contenteditable="true">-</td></tr>
+                <tr><td>22</td><td>83526</td><td><span class="status-pill pill-svc" contenteditable="true">SVC</span></td><td contenteditable="true">15/12/2026</td><td contenteditable="true">M50-20</td><td contenteditable="true">-</td></tr>
+                <tr><td>23</td><td>80992</td><td><span class="status-pill pill-svc" contenteditable="true">SVC</span></td><td contenteditable="true">25/03/2026</td><td contenteditable="true">M50-22</td><td contenteditable="true">-</td></tr>
+                <tr><td>24</td><td>81001</td><td><span class="status-pill pill-svc" contenteditable="true">SVC</span></td><td contenteditable="true">05/03/2026</td><td contenteditable="true">M50-03</td><td contenteditable="true">-</td></tr>
+                <tr><td>25</td><td>81326</td><td><span class="status-pill pill-us" contenteditable="true">U/S</span></td><td contenteditable="true">-</td><td contenteditable="true">M50-</td><td contenteditable="true">AS/B/004/26</td></tr>
             </tbody>
         </table>
-        <button class="btn-save" onclick="saveData()">Sync to Spreadsheet</button>
     </div>
 </div>
 
 <script>
-    // Automatically recalculates Serviceable vs Unserviceable counts when edits happen
-    document.getElementById('epsGrid').addEventListener('input', function() {
-        let svc = 0;
-        let us = 0;
-        const rows = document.querySelectorAll('#epsGrid tbody tr');
-        
-        rows.forEach(row => {
-            const statusCell = row.cells[1].innerText.toLowerCase();
-            if (statusCell.includes('svc') || statusCell.includes('serviceable')) {
-                svc++;
-                row.cells[1].className = 'status-svc';
-            } else if (statusCell.includes('us') || statusCell.includes('unserviceable')) {
-                us++;
-                row.cells[1].className = 'status-us';
+    function sortTable(n) {
+        var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
+        table = document.getElementById("epsTable");
+        switching = true;
+        dir = "asc";
+        while (switching) {
+            switching = false;
+            rows = table.rows;
+            for (i = 1; i < (rows.length - 1); i++) {
+                shouldSwitch = false;
+                x = rows[i].getElementsByTagName("TD")[n];
+                y = rows[i + 1].getElementsByTagName("TD")[n];
+                if (dir == "asc") {
+                    if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+                        shouldSwitch = true; break;
+                    }
+                } else if (dir == "desc") {
+                    if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
+                        shouldSwitch = true; break;
+                    }
+                }
             }
-        });
-        
-        document.getElementById('svc-count').innerText = svc;
-        document.getElementById('us-count').innerText = us;
-    });
-
-    function saveData() {
-        alert("Changes detected. Connect to SheetDB or Zapier API to save permanently.");
+            if (shouldSwitch) {
+                rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                switching = true;
+                switchcount ++;
+            } else {
+                if (switchcount == 0 && dir == "asc") {
+                    dir = "desc"; switching = true;
+                }
+            }
+        }
     }
 </script>
 
