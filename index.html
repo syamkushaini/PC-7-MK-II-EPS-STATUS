@@ -3,41 +3,38 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EPS Fleet Management System</title>
+    <title>EPS Fleet Maintenance System</title>
     <style>
-        :root { --primary: #1a73e8; --success: #2e7d32; --warning: #f2994a; --danger: #d32f2f; --bg: #f4f7fa; }
-        body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); margin: 0; padding: 20px; }
-        .container { max-width: 800px; margin: auto; }
+        :root { --primary: #1a73e8; --success: #2e7d32; --danger: #d32f2f; --warning: #f2994a; --bg: #f8f9fa; }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); margin: 0; padding: 20px; color: #333; }
+        .container { max-width: 900px; margin: auto; }
         
-        /* Dashboard Summary */
-        .dashboard { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; margin-bottom: 30px; }
-        .stat-card { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); text-align: center; border-bottom: 5px solid var(--primary); }
+        /* Dashboard Stats */
+        .dashboard { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-bottom: 25px; }
+        .stat-card { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); text-align: center; border-bottom: 5px solid var(--primary); }
         .stat-card.svc { border-bottom-color: var(--success); }
         .stat-card.us { border-bottom-color: var(--danger); }
-        .stat-val { font-size: 28px; font-weight: bold; display: block; margin-bottom: 5px; }
-        .stat-label { font-size: 13px; color: #666; font-weight: 600; text-transform: uppercase; }
+        .stat-val { font-size: 28px; font-weight: bold; display: block; }
+        .stat-label { font-size: 12px; color: #666; font-weight: bold; text-transform: uppercase; }
 
-        /* Form Design */
-        .form-section { background: white; padding: 30px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
-        h2 { margin-top: 0; font-size: 22px; color: #333; display: flex; align-items: center; gap: 10px; }
-        .form-group { margin-bottom: 20px; }
-        label { display: block; margin-bottom: 8px; font-weight: 600; font-size: 14px; color: #444; }
-        
-        select, input, textarea { width: 100%; padding: 12px; border: 2px solid #edf2f7; border-radius: 8px; font-size: 15px; transition: all 0.3s; box-sizing: border-box; }
-        select:focus, input:focus { border-color: var(--primary); outline: none; background: #fff; }
+        /* Searchable Table */
+        .table-section { background: white; padding: 20px; border-radius: 12px; margin-bottom: 30px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+        #searchBar { width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #ddd; border-radius: 8px; }
+        .status-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+        .status-table th { background: #f1f3f4; padding: 12px; text-align: left; border-bottom: 2px solid #ddd; }
+        .status-table td { padding: 10px; border-bottom: 1px solid #eee; }
+        .tag { padding: 4px 8px; border-radius: 4px; font-weight: bold; font-size: 11px; color: white; }
+        .tag-svc { background: var(--success); }
+        .tag-us { background: var(--danger); }
+        .tag-loan { background: var(--warning); }
 
-        /* Modern Radio Buttons */
-        .status-options { display: flex; gap: 15px; margin-top: 10px; }
-        .status-card { flex: 1; position: relative; }
-        .status-card input { position: absolute; opacity: 0; cursor: pointer; }
-        .status-label { display: block; padding: 15px; text-align: center; border: 2px solid #edf2f7; border-radius: 10px; cursor: pointer; font-weight: bold; transition: 0.3s; }
-        
-        #svc-radio:checked ~ .status-label { border-color: var(--success); color: var(--success); background: #e8f5e9; }
-        #us-radio:checked ~ .status-label { border-color: var(--danger); color: var(--danger); background: #ffebee; }
-
+        /* Form section remains the same style */
+        .form-section { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); }
+        .form-group { margin-bottom: 15px; }
+        label { font-weight: bold; display: block; margin-bottom: 5px; }
+        select, input, textarea { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; }
         .hidden { display: none; }
-        .btn-submit { width: 100%; background: var(--primary); color: white; border: none; padding: 16px; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; box-shadow: 0 4px 12px rgba(26, 115, 232, 0.3); }
-        .btn-submit:hover { transform: translateY(-1px); box-shadow: 0 6px 15px rgba(26, 115, 232, 0.4); }
+        .btn-submit { background: var(--primary); color: white; border: none; padding: 15px; width: 100%; border-radius: 6px; font-weight: bold; cursor: pointer; margin-top: 10px; }
     </style>
 </head>
 <body>
@@ -46,84 +43,130 @@
     <div class="dashboard">
         <div class="stat-card">
             <span class="stat-val">25</span>
-            <span class="stat-label">Total Inventory</span>
+            <span class="stat-label">Total EPS</span>
         </div>
         <div class="stat-card svc">
-            <span class="stat-val" id="svc-count">11</span>
+            <span class="stat-val">11</span>
             <span class="stat-label">Serviceable</span>
         </div>
         <div class="stat-card us">
-            <span class="stat-val" id="us-count">14</span>
+            <span class="stat-val">14</span>
             <span class="stat-label">Unserviceable</span>
         </div>
     </div>
 
+    <div class="table-section">
+        <h3>Live EPS Data Feed</h3>
+        <input type="text" id="searchBar" onkeyup="filterTable()" placeholder="Search Serial Number or Aircraft...">
+        <table class="status-table" id="epsTable">
+            <thead>
+                <tr>
+                    <th>Serial No</th>
+                    <th>Status</th>
+                    <th>Location/AC</th>
+                    <th>Remarks</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td>80379</td><td><span class="tag tag-us">U/S</span></td><td>M50-</td><td>AWD DMD 18/12/25</td></tr>
+                <tr><td>80919</td><td><span class="tag tag-svc">SVC</span></td><td>M50-21</td><td>Due 06/04/2026</td></tr>
+                <tr><td>80996</td><td><span class="tag tag-svc">SVC</span></td><td>M50-16</td><td>Due 17/08/2026</td></tr>
+                <tr><td>81045</td><td><span class="tag tag-us">U/S</span></td><td>M50-</td><td>AWD DMD 28/10/24</td></tr>
+                <tr><td>81046</td><td><span class="tag tag-svc">SVC</span></td><td>M50-01</td><td>Due 11/11/2026</td></tr>
+                <tr><td>81262</td><td><span class="tag tag-us">U/S</span></td><td>M50-</td><td>AWD DMD 02/09/25</td></tr>
+                <tr><td>81308</td><td><span class="tag tag-us">U/S</span></td><td>M50-</td><td>AWD DMD 13/06/25</td></tr>
+                <tr><td>81322</td><td><span class="tag tag-loan">LOAN</span></td><td>Nilai</td><td>AS/B/164/24</td></tr>
+                <tr><td>81688</td><td><span class="tag tag-us">U/S</span></td><td>M50-</td><td>AWD DMD 02/09/25</td></tr>
+                <tr><td>81829</td><td><span class="tag tag-us">U/S</span></td><td>M50-</td><td>AWD DMD 02/09/25</td></tr>
+                <tr><td>83204</td><td><span class="tag tag-us">U/S</span></td><td>M50-</td><td>AWD DMD 11/05/25</td></tr>
+                <tr><td>83210</td><td><span class="tag tag-us">U/S</span></td><td>M50-</td><td>AWD DMD 24/11/25</td></tr>
+                <tr><td>83218</td><td><span class="tag tag-svc">SVC</span></td><td>M50-23</td><td>Due 04/12/2026</td></tr>
+                <tr><td>83235</td><td><span class="tag tag-us">U/S</span></td><td>M50-</td><td>AWD DMD 28/10/24</td></tr>
+                <tr><td>83236</td><td><span class="tag tag-us">U/S</span></td><td>M50-</td><td>AWD DMD 11/08/25</td></tr>
+                <tr><td>83241</td><td><span class="tag tag-svc">SVC</span></td><td>M50-08</td><td>Due 22/12/2026</td></tr>
+                <tr><td>83244</td><td><span class="tag tag-svc">SVC</span></td><td>M50-07</td><td>Due 19/02/2026</td></tr>
+                <tr><td>83411</td><td><span class="tag tag-svc">SVC</span></td><td>M50-02</td><td>Due 08/07/2026</td></tr>
+                <tr><td>83413</td><td><span class="tag tag-us">U/S</span></td><td>M50-</td><td>AWD DMD 12/08/25</td></tr>
+                <tr><td>83438</td><td><span class="tag tag-us">U/S</span></td><td>M50-</td><td>AWD DMD 12/08/25</td></tr>
+                <tr><td>83515</td><td><span class="tag tag-svc">SVC</span></td><td>M50-05</td><td>Due 11/01/2027</td></tr>
+                <tr><td>83526</td><td><span class="tag tag-svc">SVC</span></td><td>M50-20</td><td>Due 15/12/2026</td></tr>
+                <tr><td>80992</td><td><span class="tag tag-svc">SVC</span></td><td>M50-22</td><td>Due 25/03/2026</td></tr>
+                <tr><td>81001</td><td><span class="tag tag-svc">SVC</span></td><td>M50-03</td><td>Due 05/03/2026</td></tr>
+                <tr><td>81326</td><td><span class="tag tag-us">U/S</span></td><td>M50-</td><td>AS/B/004/26</td></tr>
+            </tbody>
+        </table>
+    </div>
+
     <div class="form-section">
-        <h2>Update Component Status</h2>
-        <form id="updateForm" action="https://formspree.io/f/YOUR_ID" method="POST">
-            
+        <h3>Record New Update</h3>
+        <form id="updateForm" action="YOUR_FORMSPREE_URL_HERE" method="POST">
             <div class="form-group">
-                <label for="serial">Select EPS Serial Number</label>
-                <select id="serial" name="serial_number" required>
-                    <option value="">-- Start Typing or Select --</option>
-                    <optgroup label="Current Serviceable Units">
-                        <option>80919</option><option>80996</option><option>81046</option>
-                        <option>83218</option><option>83241</option><option>83244</option>
-                        <option>83411</option><option>83515</option><option>83526</option>
-                        <option>80992</option><option>81001</option>
-                    </optgroup>
-                    <optgroup label="Current Unserviceable Units">
-                        <option>80379</option><option>81045</option><option>81262</option>
-                        <option>81308</option><option>81322</option><option>81688</option>
-                        <option>81829</option><option>83204</option><option>83210</option>
-                        <option>83235</option><option>83236</option><option>83413</option>
-                        <option>83438</option><option>81326</option>
-                    </optgroup>
+                <label>Serial Number to Update</label>
+                <select name="serial" required>
+                    <option value="">-- Select --</option>
+                    <option>80379</option><option>80919</option><option>80996</option>
+                    <option>81045</option><option>81046</option><option>81262</option>
+                    <option>81308</option><option>81322</option><option>81688</option>
+                    <option>81829</option><option>83204</option><option>83210</option>
+                    <option>83218</option><option>83235</option><option>83236</option>
+                    <option>83241</option><option>83244</option><option>83411</option>
+                    <option>83413</option><option>83438</option><option>83515</option>
+                    <option>83526</option><option>80992</option><option>81001</option>
+                    <option>81326</option>
                 </select>
             </div>
-
             <div class="form-group">
-                <label>Set New Status</label>
-                <div class="status-options">
-                    <div class="status-card">
-                        <input type="radio" name="new_status" value="Serviceable" id="svc-radio" onclick="toggleFields()" required>
-                        <label for="svc-radio" class="status-label">SERVICEABLE</label>
-                    </div>
-                    <div class="status-card">
-                        <input type="radio" name="new_status" value="Unserviceable" id="us-radio" onclick="toggleFields()">
-                        <label for="us-radio" class="status-label">UNSERVICEABLE</label>
-                    </div>
+                <label>New Serviceability Status</label>
+                <select id="statusSelect" name="status" onchange="toggleForm()" required>
+                    <option value="">-- Select --</option>
+                    <option value="Serviceable">Serviceable</option>
+                    <option value="Unserviceable">Unserviceable</option>
+                </select>
+            </div>
+            <div id="svcFields" class="hidden">
+                <div class="form-group">
+                    <label>Fitted in Aircraft No</label>
+                    <input type="text" name="aircraft" placeholder="e.g. M50-21">
                 </div>
             </div>
-
-            <div id="serviceable-info" class="hidden">
+            <div id="usFields" class="hidden">
                 <div class="form-group">
-                    <label>Fitted to Aircraft Number</label>
-                    <input type="text" name="aircraft_id" placeholder="e.g. M50-21">
+                    <label>Sent for Repair/Action Date</label>
+                    <input type="date" name="repairDate">
+                </div>
+                <div class="form-group">
+                    <label>Remarks/Reference (AWD DMD)</label>
+                    <textarea name="remarks" rows="2"></textarea>
                 </div>
             </div>
-
-            <div id="unserviceable-info" class="hidden">
-                <div class="form-group">
-                    <label>Sent for Repair Date</label>
-                    <input type="date" name="repair_sent_date">
-                </div>
-                <div class="form-group">
-                    <label>Maintenance Reference (AWD/DMD/ASB)</label>
-                    <textarea name="maint_ref" rows="2" placeholder="Enter reference numbers..."></textarea>
-                </div>
-            </div>
-
-            <button type="submit" class="btn-submit">Sync Update to Records</button>
+            <button type="submit" class="btn-submit">Submit to Spreadsheet</button>
         </form>
     </div>
 </div>
 
 <script>
-    function toggleFields() {
-        const isSvc = document.getElementById('svc-radio').checked;
-        document.getElementById('serviceable-info').classList.toggle('hidden', !isSvc);
-        document.getElementById('unserviceable-info').classList.toggle('hidden', isSvc);
+    function filterTable() {
+        var input, filter, table, tr, td, i, txtValue;
+        input = document.getElementById("searchBar");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("epsTable");
+        tr = table.getElementsByTagName("tr");
+        for (i = 1; i < tr.length; i++) {
+            tr[i].style.display = "none";
+            td = tr[i].getElementsByTagName("td");
+            for (var j = 0; j < td.length; j++) {
+                if (td[j] && td[j].innerHTML.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                    break;
+                }
+            }
+        }
+    }
+
+    function toggleForm() {
+        var status = document.getElementById("statusSelect").value;
+        document.getElementById("svcFields").classList.toggle("hidden", status !== "Serviceable");
+        document.getElementById("usFields").classList.toggle("hidden", status !== "Unserviceable");
     }
 </script>
 
