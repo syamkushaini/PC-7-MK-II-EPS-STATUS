@@ -1,86 +1,74 @@
-{comp.lastUpdated && (
-                                        <div className="mt-2 text-xs text-gray-400">
-                                            Last Updated: {comp.lastUpdated}
-                                        </div>
-                                    )}
-                                </div>
-                            ))}
-                        </div>
-                    </div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EPS Component Update</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f7f9; padding: 20px; }
+        .container { max-width: 500px; background: white; padding: 30px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); margin: auto; }
+        h2 { color: #2c3e50; text-align: center; margin-bottom: 20px; }
+        label { display: block; margin-top: 15px; font-weight: bold; color: #34495e; }
+        select, input, textarea { width: 100%; padding: 10px; margin-top: 5px; border: 1px solid #ccd1d9; border-radius: 4px; box-sizing: border-box; }
+        .status-group { display: flex; gap: 10px; margin-top: 10px; }
+        .btn-submit { background-color: #27ae60; color: white; border: none; padding: 12px; width: 100%; border-radius: 4px; cursor: pointer; font-size: 16px; margin-top: 20px; }
+        .btn-submit:hover { background-color: #219150; }
+        .hidden { display: none; }
+    </style>
+</head>
+<body>
 
-                    {showUpdateForm && (
-                        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-                            <div className="bg-white rounded-2xl p-8 max-w-lg w-full shadow-2xl">
-                                <h2 className="text-2xl font-bold mb-6">Update Serial: {selectedComponent?.epsSerial}</h2>
-                                <div className="space-y-5">
-                                    <div>
-                                        <label className="block text-sm font-semibold text-gray-700 mb-2">Status</label>
-                                        <select 
-                                            className="w-full p-3 border-2 border-gray-200 rounded-xl"
-                                            value={updateData.status}
-                                            onChange={(e) => setUpdateData({...updateData, status: e.target.value})}
-                                        >
-                                            <option value="serviceable">Serviceable</option>
-                                            <option value="unserviceable">Unserviceable</option>
-                                        </select>
-                                    </div>
-                                    
-                                    {updateData.status === 'serviceable' ? (
-                                        <div>
-                                            <label className="block text-sm font-semibold text-gray-700 mb-2">Aircraft No</label>
-                                            <input 
-                                                className="w-full p-3 border-2 border-gray-200 rounded-xl"
-                                                value={updateData.aircraftNo}
-                                                onChange={(e) => setUpdateData({...updateData, aircraftNo: e.target.value})}
-                                                placeholder="e.g. M50-21"
-                                            />
-                                        </div>
-                                    ) : (
-                                        <div>
-                                            <label className="block text-sm font-semibold text-gray-700 mb-2">Sent for Repair Date</label>
-                                            <input 
-                                                className="w-full p-3 border-2 border-gray-200 rounded-xl"
-                                                value={updateData.sentForRepair}
-                                                onChange={(e) => setUpdateData({...updateData, sentForRepair: e.target.value})}
-                                                placeholder="DD/MM/YY"
-                                            />
-                                        </div>
-                                    )}
+<div class="container">
+    <h2>EPS Status Update (2026)</h2>
+    <form id="epsForm">
+        <label for="serial">EPS Serial Number</label>
+        <select id="serial" name="serial" required>
+            <option value="">-- Select Serial No --</option>
+            <option value="80379">80379</option><option value="80919">80919</option>
+            <option value="80996">80996</option><option value="81045">81045</option>
+            <option value="81046">81046</option><option value="81262">81262</option>
+            <option value="81308">81308</option><option value="81322">81322</option>
+            <option value="81688">81688</option><option value="81829">81829</option>
+            <option value="83204">83204</option><option value="83210">83210</option>
+            <option value="83218">83218</option><option value="83235">83235</option>
+            <option value="83236">83236</option><option value="83241">83241</option>
+            <option value="83244">83244</option><option value="83411">83411</option>
+            <option value="83413">83413</option><option value="83438">83438</option>
+            <option value="83515">83515</option><option value="83526">83526</option>
+            <option value="80992">80992</option><option value="81001">81001</option>
+            <option value="81326">81326</option>
+        </select>
 
-                                    <div>
-                                        <label className="block text-sm font-semibold text-gray-700 mb-2">Remarks</label>
-                                        <textarea 
-                                            className="w-full p-3 border-2 border-gray-200 rounded-xl"
-                                            value={updateData.remarks}
-                                            onChange={(e) => setUpdateData({...updateData, remarks: e.target.value})}
-                                            rows="3"
-                                        />
-                                    </div>
+        <label>Serviceability Status</label>
+        <div class="status-group">
+            <input type="radio" name="status" value="Serviceable" id="serv" onclick="toggleFields()" required> Serviceable
+            <input type="radio" name="status" value="Unserviceable" id="unserv" onclick="toggleFields()"> Unserviceable
+        </div>
 
-                                    <div className="flex gap-3 mt-8">
-                                        <button 
-                                            onClick={saveUpdate}
-                                            className="flex-1 bg-blue-600 text-white py-3 rounded-xl font-bold hover:bg-blue-700 transition"
-                                        >
-                                            Save Changes
-                                        </button>
-                                        <button 
-                                            onClick={() => setShowUpdateForm(false)}
-                                            className="flex-1 bg-gray-200 text-gray-800 py-3 rounded-xl font-bold hover:bg-gray-300 transition"
-                                        >
-                                            Cancel
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    )}
-                </div>
-            );
-        }
+        <div id="serviceableFields" class="hidden">
+            <label for="aircraft">Aircraft Number (e.g., M50-21)</label>
+            <input type="text" id="aircraft" name="aircraft" placeholder="Enter Aircraft No">
+        </div>
 
-        const root = ReactDOM.createRoot(document.getElementById('root'));
-        root.render(<EPSUpdateSystem />);
-    </script>
+        <div id="unserviceableFields" class="hidden">
+            <label for="repairDate">Date Sent for Repair</label>
+            <input type="date" id="repairDate" name="repairDate">
+            
+            <label for="remarks">Remarks (Reference No)</label>
+            <textarea id="remarks" name="remarks" rows="3" placeholder="Enter AWD DMD or AS/B codes..."></textarea>
+        </div>
+
+        <button type="submit" class="btn-submit">Submit Record</button>
+    </form>
+</div>
+
+<script>
+    function toggleFields() {
+        const isServiceable = document.getElementById('serv').checked;
+        document.getElementById('serviceableFields').classList.toggle('hidden', !isServiceable);
+        document.getElementById('unserviceableFields').classList.toggle('hidden', isServiceable);
+    }
+</script>
+
 </body>
 </html>
