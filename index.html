@@ -16,28 +16,36 @@
         }
 
         body { font-family: 'Segoe UI', sans-serif; background: #f0f2f5; margin: 0; padding: 20px; color: #333; }
-        .container { max-width: 1200px; margin: auto; }
-        .header { background: white; padding: 30px; text-align: center; border-radius: 20px; box-shadow: var(--card-shadow); margin-bottom: 30px; border-top: 10px solid var(--primary); }
-        h1 { margin: 0; color: var(--primary); font-size: 24px; text-transform: uppercase; letter-spacing: 1px; }
+        .container { max-width: 1250px; margin: auto; }
+        .header { background: white; padding: 25px; text-align: center; border-radius: 15px; box-shadow: var(--card-shadow); margin-bottom: 25px; border-top: 8px solid var(--primary); }
+        h1 { margin: 0; color: var(--primary); font-size: 22px; text-transform: uppercase; letter-spacing: 1px; }
 
-        /* Sort Button Styling */
-        th { padding: 15px; background: #f8f9fa; border-bottom: 2px solid #eee; cursor: pointer; transition: 0.2s; position: relative; font-size: 12px; text-transform: uppercase; color: #666; }
-        th:hover { background: #e9ecef; color: var(--primary); }
-        th::after { content: ' ↕'; font-size: 10px; opacity: 0.5; }
+        .table-container { background: white; border-radius: 15px; padding: 20px; box-shadow: var(--card-shadow); overflow-x: auto; }
+        .instructions { color: #1976d2; font-weight: bold; margin-bottom: 15px; font-size: 14px; }
 
-        /* Table Design */
-        .table-container { background: white; border-radius: 20px; padding: 25px; box-shadow: var(--card-shadow); }
-        table { width: 100%; border-collapse: collapse; }
-        td { padding: 12px 15px; border-bottom: 1px solid #f0f0f0; font-size: 14px; }
+        table { width: 100%; border-collapse: collapse; min-width: 900px; }
+        th { padding: 12px; background: #f8f9fa; border-bottom: 2px solid #eee; cursor: pointer; text-align: left; font-size: 11px; text-transform: uppercase; color: #666; position: relative; }
+        th:hover { background: #e9ecef; }
+        th::after { content: ' ↕'; opacity: 0.4; }
+
+        td { padding: 10px 12px; border-bottom: 1px solid #f0f0f0; font-size: 13px; }
         tr:hover { background: #fafafa; }
-        
-        /* Interactive Elements */
-        td[contenteditable="true"] { outline: none; transition: 0.2s; }
-        td[contenteditable="true"]:focus { background: #fffde7; border-left: 3px solid var(--accent); }
-        
-        .status-pill { padding: 5px 12px; border-radius: 15px; font-size: 11px; font-weight: bold; }
-        .pill-svc { background: var(--svc-bg); color: var(--svc-text); }
-        .pill-us { background: var(--us-bg); color: var(--us-text); }
+
+        /* Dropdown Styling */
+        select.status-dropdown {
+            padding: 5px;
+            border-radius: 5px;
+            font-weight: bold;
+            font-size: 12px;
+            border: 1px solid #ddd;
+            cursor: pointer;
+            width: 100%;
+        }
+        .opt-svc { color: var(--svc-text); background: var(--svc-bg); }
+        .opt-us { color: var(--us-text); background: var(--us-bg); }
+
+        td[contenteditable="true"] { outline: none; border-radius: 4px; }
+        td[contenteditable="true"]:focus { background: #fffde7; box-shadow: inset 0 0 0 1px var(--accent); }
     </style>
 </head>
 <body>
@@ -48,7 +56,7 @@
     </div>
 
     <div class="table-container">
-        <p style="color: #1976d2; font-weight: bold; margin-bottom: 15px;">💡 Click table headers to SORT. Click cells to EDIT.</p>
+        <p class="instructions">💡 Usage: Select Status from dropdown. Click Aircraft/Remarks to edit. Click headers to Sort.</p>
         <table id="epsTable">
             <thead>
                 <tr>
@@ -60,68 +68,86 @@
                     <th onclick="sortTable(5)">Remarks</th>
                 </tr>
             </thead>
-            <tbody>
-                <tr><td>01</td><td>80379</td><td><span class="status-pill pill-us" contenteditable="true">U/S</span></td><td contenteditable="true">-</td><td contenteditable="true">M50-</td><td contenteditable="true">AS/B156//24 (AWD DMD 18/12/25)</td></tr>
-                <tr><td>02</td><td>80919</td><td><span class="status-pill pill-svc" contenteditable="true">SVC</span></td><td contenteditable="true">06/04/2026</td><td contenteditable="true">M50-21</td><td contenteditable="true">-</td></tr>
-                <tr><td>03</td><td>80996</td><td><span class="status-pill pill-svc" contenteditable="true">SVC</span></td><td contenteditable="true">17/08/2026</td><td contenteditable="true">M50-16</td><td contenteditable="true">-</td></tr>
-                <tr><td>04</td><td>81045</td><td><span class="status-pill pill-us" contenteditable="true">U/S</span></td><td contenteditable="true">-</td><td contenteditable="true">M50-</td><td contenteditable="true">AS/B171//24 (AWD DMD 28/10/24)</td></tr>
-                <tr><td>05</td><td>81046</td><td><span class="status-pill pill-svc" contenteditable="true">SVC</span></td><td contenteditable="true">11/11/2026</td><td contenteditable="true">M50-01</td><td contenteditable="true">-</td></tr>
-                <tr><td>06</td><td>81262</td><td><span class="status-pill pill-us" contenteditable="true">U/S</span></td><td contenteditable="true">-</td><td contenteditable="true">M50-</td><td contenteditable="true">AS/B/111/25 (AWD DMD 02/09/25)</td></tr>
-                <tr><td>07</td><td>81308</td><td><span class="status-pill pill-us" contenteditable="true">U/S</span></td><td contenteditable="true">-</td><td contenteditable="true">M50-</td><td contenteditable="true">AS/B/055/25 (AWD DMD 13/06/25)</td></tr>
-                <tr><td>08</td><td>81322</td><td><span class="status-pill pill-us" contenteditable="true">U/S</span></td><td contenteditable="true">-</td><td contenteditable="true">M50-</td><td contenteditable="true">Sent to Nilai (Loan) (15/08/25)</td></tr>
-                <tr><td>09</td><td>81688</td><td><span class="status-pill pill-us" contenteditable="true">U/S</span></td><td contenteditable="true">-</td><td contenteditable="true">M50-</td><td contenteditable="true">AS/B/110/25 (AWD DMD 02/09/25)</td></tr>
-                <tr><td>10</td><td>81829</td><td><span class="status-pill pill-us" contenteditable="true">U/S</span></td><td contenteditable="true">-</td><td contenteditable="true">M50-</td><td contenteditable="true">AS/B/112/25 (AWD DMD 02/09/25)</td></tr>
-                <tr><td>11</td><td>83204</td><td><span class="status-pill pill-us" contenteditable="true">U/S</span></td><td contenteditable="true">-</td><td contenteditable="true">M50-</td><td contenteditable="true">AS/B109//25 (AWD DMD 11/05/25)</td></tr>
-                <tr><td>12</td><td>83210</td><td><span class="status-pill pill-us" contenteditable="true">U/S</span></td><td contenteditable="true">-</td><td contenteditable="true">M50-</td><td contenteditable="true">AS/B/148/25 (AWD DMD 24/11/25)</td></tr>
-                <tr><td>13</td><td>83218</td><td><span class="status-pill pill-svc" contenteditable="true">SVC</span></td><td contenteditable="true">04/12/2026</td><td contenteditable="true">M50-23</td><td contenteditable="true">-</td></tr>
-                <tr><td>14</td><td>83235</td><td><span class="status-pill pill-us" contenteditable="true">U/S</span></td><td contenteditable="true">-</td><td contenteditable="true">M50-</td><td contenteditable="true">AS/B169//24 (AWD DMD 28/10/24)</td></tr>
-                <tr><td>15</td><td>83236</td><td><span class="status-pill pill-us" contenteditable="true">U/S</span></td><td contenteditable="true">-</td><td contenteditable="true">M50-</td><td contenteditable="true">AS/B/075/25 (AWD DMD 11/08/25)</td></tr>
-                <tr><td>16</td><td>83241</td><td><span class="status-pill pill-svc" contenteditable="true">SVC</span></td><td contenteditable="true">22/12/2026</td><td contenteditable="true">M50-08</td><td contenteditable="true">-</td></tr>
-                <tr><td>17</td><td>83244</td><td><span class="status-pill pill-svc" contenteditable="true">SVC</span></td><td contenteditable="true">19/02/2026</td><td contenteditable="true">M50-07</td><td contenteditable="true">-</td></tr>
-                <tr><td>18</td><td>83411</td><td><span class="status-pill pill-svc" contenteditable="true">SVC</span></td><td contenteditable="true">08/07/2026</td><td contenteditable="true">M50-02</td><td contenteditable="true">-</td></tr>
-                <tr><td>19</td><td>83413</td><td><span class="status-pill pill-us" contenteditable="true">U/S</span></td><td contenteditable="true">-</td><td contenteditable="true">M50-</td><td contenteditable="true">AS/B108//25 (AWD DMD 12/08/25)</td></tr>
-                <tr><td>20</td><td>83438</td><td><span class="status-pill pill-us" contenteditable="true">U/S</span></td><td contenteditable="true">-</td><td contenteditable="true">M50-</td><td contenteditable="true">AS/B100//25 (AWD DMD 12/08/25)</td></tr>
-                <tr><td>21</td><td>83515</td><td><span class="status-pill pill-svc" contenteditable="true">SVC</span></td><td contenteditable="true">11/01/2027</td><td contenteditable="true">M50-05</td><td contenteditable="true">-</td></tr>
-                <tr><td>22</td><td>83526</td><td><span class="status-pill pill-svc" contenteditable="true">SVC</span></td><td contenteditable="true">15/12/2026</td><td contenteditable="true">M50-20</td><td contenteditable="true">-</td></tr>
-                <tr><td>23</td><td>80992</td><td><span class="status-pill pill-svc" contenteditable="true">SVC</span></td><td contenteditable="true">25/03/2026</td><td contenteditable="true">M50-22</td><td contenteditable="true">-</td></tr>
-                <tr><td>24</td><td>81001</td><td><span class="status-pill pill-svc" contenteditable="true">SVC</span></td><td contenteditable="true">05/03/2026</td><td contenteditable="true">M50-03</td><td contenteditable="true">-</td></tr>
-                <tr><td>25</td><td>81326</td><td><span class="status-pill pill-us" contenteditable="true">U/S</span></td><td contenteditable="true">-</td><td contenteditable="true">M50-</td><td contenteditable="true">AS/B/004/26</td></tr>
-            </tbody>
+            <tbody id="tableBody">
+                </tbody>
         </table>
     </div>
 </div>
 
 <script>
+    // Data extracted from STATUS EPS 2026.pdf
+    const epsData = [
+        ["01", "80379", "Unserviceable", "-", "M50-", "U/S (AS/B156//24) (AWD DMD 18/12/25)"],
+        ["02", "80919", "Serviceable", "06/04/2026", "M50-21", "-"],
+        ["03", "80996", "Serviceable", "17/08/2026", "M50-16", "-"],
+        ["04", "81045", "Unserviceable", "-", "M50-", "U/S (AS/B171//24) (AWD DMD 28/10/24)"],
+        ["05", "81046", "Serviceable", "11/11/2026", "M50-01", "-"],
+        ["06", "81262", "Unserviceable", "-", "M50-", "U/S (AS/B/111/25) (AWD DMD 02/09/25)"],
+        ["07", "81308", "Unserviceable", "-", "M50-", "U/S (AS/B/055/25) (AWD DMD 13/06/25)"],
+        ["08", "81322", "Unserviceable", "-", "M50-", "Sent to Nilai (Loan) (15/08/25)"],
+        ["09", "81688", "Unserviceable", "-", "M50-", "U/S (AS/B/110/25) (AWD DMD 02/09/25)"],
+        ["10", "81829", "Unserviceable", "-", "M50-", "U/S (AS/B/112/25) (AWD DMD 02/09/25)"],
+        ["11", "83204", "Unserviceable", "-", "M50-", "U/S (AS/B109//25) (AWD DMD 11/05/25)"],
+        ["12", "83210", "Unserviceable", "-", "M50-", "U/S (AS/B/148/25) (AWD DMD 24/11/25)"],
+        ["13", "83218", "Serviceable", "04/12/2026", "M50-23", "-"],
+        ["14", "83235", "Unserviceable", "-", "M50-", "U/S (AS/B169//24) (AWD DMD 28/10/24)"],
+        ["15", "83236", "Unserviceable", "-", "M50-", "U/S (AS/B/075/25) (AWD DMD 11/08/25)"],
+        ["16", "83241", "Serviceable", "22/12/2026", "M50-08", "-"],
+        ["17", "83244", "Serviceable", "19/02/2026", "M50-07", "-"],
+        ["18", "83411", "Serviceable", "08/07/2026", "M50-02", "-"],
+        ["19", "83413", "Unserviceable", "-", "M50-", "U/S (AS/B108//25) (AWD DMD 12/08/25)"],
+        ["20", "83438", "Unserviceable", "-", "M50-", "U/S (AS/B100//25) (AWD DMD 12/08/25)"],
+        ["21", "83515", "Serviceable", "11/01/2027", "M50-05", "-"],
+        ["22", "83526", "Serviceable", "15/12/2026", "M50-20", "-"],
+        ["23", "80992", "Serviceable", "25/03/2026", "M50-22", "-"],
+        ["24", "81001", "Serviceable", "05/03/2026", "M50-03", "-"],
+        ["25", "81326", "Unserviceable", "-", "M50-", "U/S (AS/B/004/26)"]
+    ];
+
+    const tableBody = document.getElementById('tableBody');
+
+    epsData.forEach(item => {
+        let row = `<tr>
+            <td>${item[0]}</td>
+            <td>${item[1]}</td>
+            <td>
+                <select class="status-dropdown ${item[2] === 'Serviceable' ? 'opt-svc' : 'opt-us'}">
+                    <option value="Serviceable" ${item[2] === 'Serviceable' ? 'selected' : ''}>Serviceable</option>
+                    <option value="Unserviceable" ${item[2] === 'Unserviceable' ? 'selected' : ''}>Unserviceable</option>
+                </select>
+            </td>
+            <td contenteditable="true">${item[3]}</td>
+            <td contenteditable="true">${item[4]}</td>
+            <td contenteditable="true">${item[5]}</td>
+        </tr>`;
+        tableBody.innerHTML += row;
+    });
+
     function sortTable(n) {
         var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
         table = document.getElementById("epsTable");
-        switching = true;
-        dir = "asc";
+        switching = true; dir = "asc";
         while (switching) {
-            switching = false;
-            rows = table.rows;
+            switching = false; rows = table.rows;
             for (i = 1; i < (rows.length - 1); i++) {
                 shouldSwitch = false;
                 x = rows[i].getElementsByTagName("TD")[n];
                 y = rows[i + 1].getElementsByTagName("TD")[n];
+                
+                let valX = x.querySelector('select') ? x.querySelector('select').value : x.innerText;
+                let valY = y.querySelector('select') ? y.querySelector('select').value : y.innerText;
+
                 if (dir == "asc") {
-                    if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
-                        shouldSwitch = true; break;
-                    }
+                    if (valX.toLowerCase() > valY.toLowerCase()) { shouldSwitch = true; break; }
                 } else if (dir == "desc") {
-                    if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
-                        shouldSwitch = true; break;
-                    }
+                    if (valX.toLowerCase() < valY.toLowerCase()) { shouldSwitch = true; break; }
                 }
             }
             if (shouldSwitch) {
                 rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
-                switching = true;
-                switchcount ++;
+                switching = true; switchcount ++;
             } else {
-                if (switchcount == 0 && dir == "asc") {
-                    dir = "desc"; switching = true;
-                }
+                if (switchcount == 0 && dir == "asc") { dir = "desc"; switching = true; }
             }
         }
     }
