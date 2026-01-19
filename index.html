@@ -3,70 +3,127 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EPS Component Update</title>
+    <title>EPS Fleet Management System</title>
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f7f9; padding: 20px; }
-        .container { max-width: 500px; background: white; padding: 30px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); margin: auto; }
-        h2 { color: #2c3e50; text-align: center; margin-bottom: 20px; }
-        label { display: block; margin-top: 15px; font-weight: bold; color: #34495e; }
-        select, input, textarea { width: 100%; padding: 10px; margin-top: 5px; border: 1px solid #ccd1d9; border-radius: 4px; box-sizing: border-box; }
-        .status-group { display: flex; gap: 10px; margin-top: 10px; }
-        .btn-submit { background-color: #27ae60; color: white; border: none; padding: 12px; width: 100%; border-radius: 4px; cursor: pointer; font-size: 16px; margin-top: 20px; }
-        .btn-submit:hover { background-color: #219150; }
+        :root { --primary: #1a73e8; --success: #2e7d32; --warning: #f2994a; --danger: #d32f2f; --bg: #f4f7fa; }
+        body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); margin: 0; padding: 20px; }
+        .container { max-width: 800px; margin: auto; }
+        
+        /* Dashboard Summary */
+        .dashboard { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; margin-bottom: 30px; }
+        .stat-card { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); text-align: center; border-bottom: 5px solid var(--primary); }
+        .stat-card.svc { border-bottom-color: var(--success); }
+        .stat-card.us { border-bottom-color: var(--danger); }
+        .stat-val { font-size: 28px; font-weight: bold; display: block; margin-bottom: 5px; }
+        .stat-label { font-size: 13px; color: #666; font-weight: 600; text-transform: uppercase; }
+
+        /* Form Design */
+        .form-section { background: white; padding: 30px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
+        h2 { margin-top: 0; font-size: 22px; color: #333; display: flex; align-items: center; gap: 10px; }
+        .form-group { margin-bottom: 20px; }
+        label { display: block; margin-bottom: 8px; font-weight: 600; font-size: 14px; color: #444; }
+        
+        select, input, textarea { width: 100%; padding: 12px; border: 2px solid #edf2f7; border-radius: 8px; font-size: 15px; transition: all 0.3s; box-sizing: border-box; }
+        select:focus, input:focus { border-color: var(--primary); outline: none; background: #fff; }
+
+        /* Modern Radio Buttons */
+        .status-options { display: flex; gap: 15px; margin-top: 10px; }
+        .status-card { flex: 1; position: relative; }
+        .status-card input { position: absolute; opacity: 0; cursor: pointer; }
+        .status-label { display: block; padding: 15px; text-align: center; border: 2px solid #edf2f7; border-radius: 10px; cursor: pointer; font-weight: bold; transition: 0.3s; }
+        
+        #svc-radio:checked ~ .status-label { border-color: var(--success); color: var(--success); background: #e8f5e9; }
+        #us-radio:checked ~ .status-label { border-color: var(--danger); color: var(--danger); background: #ffebee; }
+
         .hidden { display: none; }
+        .btn-submit { width: 100%; background: var(--primary); color: white; border: none; padding: 16px; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; box-shadow: 0 4px 12px rgba(26, 115, 232, 0.3); }
+        .btn-submit:hover { transform: translateY(-1px); box-shadow: 0 6px 15px rgba(26, 115, 232, 0.4); }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h2>EPS Status Update (2026)</h2>
-    <form id="epsForm">
-        <label for="serial">EPS Serial Number</label>
-        <select id="serial" name="serial" required>
-            <option value="">-- Select Serial No --</option>
-            <option value="80379">80379</option><option value="80919">80919</option>
-            <option value="80996">80996</option><option value="81045">81045</option>
-            <option value="81046">81046</option><option value="81262">81262</option>
-            <option value="81308">81308</option><option value="81322">81322</option>
-            <option value="81688">81688</option><option value="81829">81829</option>
-            <option value="83204">83204</option><option value="83210">83210</option>
-            <option value="83218">83218</option><option value="83235">83235</option>
-            <option value="83236">83236</option><option value="83241">83241</option>
-            <option value="83244">83244</option><option value="83411">83411</option>
-            <option value="83413">83413</option><option value="83438">83438</option>
-            <option value="83515">83515</option><option value="83526">83526</option>
-            <option value="80992">80992</option><option value="81001">81001</option>
-            <option value="81326">81326</option>
-        </select>
-
-        <label>Serviceability Status</label>
-        <div class="status-group">
-            <input type="radio" name="status" value="Serviceable" id="serv" onclick="toggleFields()" required> Serviceable
-            <input type="radio" name="status" value="Unserviceable" id="unserv" onclick="toggleFields()"> Unserviceable
+    <div class="dashboard">
+        <div class="stat-card">
+            <span class="stat-val">25</span>
+            <span class="stat-label">Total Inventory</span>
         </div>
-
-        <div id="serviceableFields" class="hidden">
-            <label for="aircraft">Aircraft Number (e.g., M50-21)</label>
-            <input type="text" id="aircraft" name="aircraft" placeholder="Enter Aircraft No">
+        <div class="stat-card svc">
+            <span class="stat-val" id="svc-count">11</span>
+            <span class="stat-label">Serviceable</span>
         </div>
+        <div class="stat-card us">
+            <span class="stat-val" id="us-count">14</span>
+            <span class="stat-label">Unserviceable</span>
+        </div>
+    </div>
 
-        <div id="unserviceableFields" class="hidden">
-            <label for="repairDate">Date Sent for Repair</label>
-            <input type="date" id="repairDate" name="repairDate">
+    <div class="form-section">
+        <h2>Update Component Status</h2>
+        <form id="updateForm" action="https://formspree.io/f/YOUR_ID" method="POST">
             
-            <label for="remarks">Remarks (Reference No)</label>
-            <textarea id="remarks" name="remarks" rows="3" placeholder="Enter AWD DMD or AS/B codes..."></textarea>
-        </div>
+            <div class="form-group">
+                <label for="serial">Select EPS Serial Number</label>
+                <select id="serial" name="serial_number" required>
+                    <option value="">-- Start Typing or Select --</option>
+                    <optgroup label="Current Serviceable Units">
+                        <option>80919</option><option>80996</option><option>81046</option>
+                        <option>83218</option><option>83241</option><option>83244</option>
+                        <option>83411</option><option>83515</option><option>83526</option>
+                        <option>80992</option><option>81001</option>
+                    </optgroup>
+                    <optgroup label="Current Unserviceable Units">
+                        <option>80379</option><option>81045</option><option>81262</option>
+                        <option>81308</option><option>81322</option><option>81688</option>
+                        <option>81829</option><option>83204</option><option>83210</option>
+                        <option>83235</option><option>83236</option><option>83413</option>
+                        <option>83438</option><option>81326</option>
+                    </optgroup>
+                </select>
+            </div>
 
-        <button type="submit" class="btn-submit">Submit Record</button>
-    </form>
+            <div class="form-group">
+                <label>Set New Status</label>
+                <div class="status-options">
+                    <div class="status-card">
+                        <input type="radio" name="new_status" value="Serviceable" id="svc-radio" onclick="toggleFields()" required>
+                        <label for="svc-radio" class="status-label">SERVICEABLE</label>
+                    </div>
+                    <div class="status-card">
+                        <input type="radio" name="new_status" value="Unserviceable" id="us-radio" onclick="toggleFields()">
+                        <label for="us-radio" class="status-label">UNSERVICEABLE</label>
+                    </div>
+                </div>
+            </div>
+
+            <div id="serviceable-info" class="hidden">
+                <div class="form-group">
+                    <label>Fitted to Aircraft Number</label>
+                    <input type="text" name="aircraft_id" placeholder="e.g. M50-21">
+                </div>
+            </div>
+
+            <div id="unserviceable-info" class="hidden">
+                <div class="form-group">
+                    <label>Sent for Repair Date</label>
+                    <input type="date" name="repair_sent_date">
+                </div>
+                <div class="form-group">
+                    <label>Maintenance Reference (AWD/DMD/ASB)</label>
+                    <textarea name="maint_ref" rows="2" placeholder="Enter reference numbers..."></textarea>
+                </div>
+            </div>
+
+            <button type="submit" class="btn-submit">Sync Update to Records</button>
+        </form>
+    </div>
 </div>
 
 <script>
     function toggleFields() {
-        const isServiceable = document.getElementById('serv').checked;
-        document.getElementById('serviceableFields').classList.toggle('hidden', !isServiceable);
-        document.getElementById('unserviceableFields').classList.toggle('hidden', isServiceable);
+        const isSvc = document.getElementById('svc-radio').checked;
+        document.getElementById('serviceable-info').classList.toggle('hidden', !isSvc);
+        document.getElementById('unserviceable-info').classList.toggle('hidden', isSvc);
     }
 </script>
 
