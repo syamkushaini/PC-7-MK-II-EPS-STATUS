@@ -4,12 +4,143 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EPS Serviceability System</title>
-    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+    <script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.5/babel.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lucide/0.263.1/umd/lucide.min.js"></script>
     <style>
-        .lucide { display: inline-block; vertical-align: middle; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; }
+        .min-h-screen { min-height: 100vh; }
+        .bg-gradient { background: linear-gradient(to bottom right, #eff6ff, #e0e7ff); }
+        .container { max-width: 72rem; margin: 0 auto; padding: 1rem; }
+        .card { background: white; border-radius: 1rem; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); padding: 1.5rem; }
+        .card-lg { box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1); }
+        .flex { display: flex; }
+        .flex-col { flex-direction: column; }
+        .items-center { align-items: center; }
+        .justify-between { justify-content: space-between; }
+        .gap-2 { gap: 0.5rem; }
+        .gap-3 { gap: 0.75rem; }
+        .gap-4 { gap: 1rem; }
+        .mb-2 { margin-bottom: 0.5rem; }
+        .mb-3 { margin-bottom: 0.75rem; }
+        .mb-4 { margin-bottom: 1rem; }
+        .mb-6 { margin-bottom: 1.5rem; }
+        .mt-1 { margin-top: 0.25rem; }
+        .mt-2 { margin-top: 0.5rem; }
+        .mt-3 { margin-top: 0.75rem; }
+        .mt-8 { margin-top: 2rem; }
+        .p-4 { padding: 1rem; }
+        .p-5 { padding: 1.25rem; }
+        .p-8 { padding: 2rem; }
+        .p-12 { padding: 3rem; }
+        .px-3 { padding-left: 0.75rem; padding-right: 0.75rem; }
+        .px-4 { padding-left: 1rem; padding-right: 1rem; }
+        .px-5 { padding-left: 1.25rem; padding-right: 1.25rem; }
+        .px-6 { padding-left: 1.5rem; padding-right: 1.5rem; }
+        .py-1 { padding-top: 0.25rem; padding-bottom: 0.25rem; }
+        .py-2 { padding-top: 0.5rem; padding-bottom: 0.5rem; }
+        .py-3 { padding-top: 0.75rem; padding-bottom: 0.75rem; }
+        .pl-3 { padding-left: 0.75rem; }
+        .pl-12 { padding-left: 3rem; }
+        .pr-4 { padding-right: 1rem; }
+        .pt-2 { padding-top: 0.5rem; }
+        .grid { display: grid; }
+        .grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        .grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+        .rounded-lg { border-radius: 0.5rem; }
+        .rounded-xl { border-radius: 0.75rem; }
+        .rounded-2xl { border-radius: 1rem; }
+        .rounded-full { border-radius: 9999px; }
+        .border-2 { border-width: 2px; }
+        .border-l-4 { border-left-width: 4px; }
+        .border-t { border-top-width: 1px; }
+        .border-transparent { border-color: transparent; }
+        .border-gray-200 { border-color: #e5e7eb; }
+        .border-blue-300 { border-color: #93c5fd; }
+        .border-blue-500 { border-color: #3b82f6; }
+        .border-green-500 { border-color: #22c55e; }
+        .border-red-500 { border-color: #ef4444; }
+        .bg-white { background-color: white; }
+        .bg-blue-50 { background-color: #eff6ff; }
+        .bg-green-50 { background-color: #f0fdf4; }
+        .bg-green-100 { background-color: #dcfce7; }
+        .bg-red-50 { background-color: #fef2f2; }
+        .bg-red-100 { background-color: #fee2e2; }
+        .bg-orange-50 { background-color: #fff7ed; }
+        .bg-gray-200 { background-color: #e5e7eb; }
+        .bg-blue-600 { background-color: #2563eb; }
+        .bg-green-600 { background-color: #16a34a; }
+        .bg-gradient-blue { background: linear-gradient(to bottom right, #3b82f6, #2563eb); }
+        .bg-gradient-green { background: linear-gradient(to bottom right, #22c55e, #16a34a); }
+        .bg-gradient-red { background: linear-gradient(to bottom right, #ef4444, #dc2626); }
+        .text-xs { font-size: 0.75rem; line-height: 1rem; }
+        .text-sm { font-size: 0.875rem; line-height: 1.25rem; }
+        .text-lg { font-size: 1.125rem; line-height: 1.75rem; }
+        .text-2xl { font-size: 1.5rem; line-height: 2rem; }
+        .text-3xl { font-size: 1.875rem; line-height: 2.25rem; }
+        .text-4xl { font-size: 2.25rem; line-height: 2.5rem; }
+        .font-medium { font-weight: 500; }
+        .font-semibold { font-weight: 600; }
+        .font-bold { font-weight: 700; }
+        .text-white { color: white; }
+        .text-gray-400 { color: #9ca3af; }
+        .text-gray-500 { color: #6b7280; }
+        .text-gray-600 { color: #4b5563; }
+        .text-gray-700 { color: #374151; }
+        .text-gray-800 { color: #1f2937; }
+        .text-blue-600 { color: #2563eb; }
+        .text-blue-700 { color: #1d4ed8; }
+        .text-green-700 { color: #15803d; }
+        .text-red-700 { color: #b91c1c; }
+        .text-orange-700 { color: #c2410c; }
+        .shadow-lg { box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); }
+        .shadow-xl { box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1); }
+        .shadow-2xl { box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25); }
+        .opacity-90 { opacity: 0.9; }
+        .cursor-pointer { cursor: pointer; }
+        .transition { transition: all 0.15s ease-in-out; }
+        .hover\:shadow-xl:hover { box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1); }
+        .hover\:border-blue-300:hover { border-color: #93c5fd; }
+        .hover\:border-green-300:hover { border-color: #86efac; }
+        .hover\:bg-blue-700:hover { background-color: #1d4ed8; }
+        .hover\:bg-green-700:hover { background-color: #15803d; }
+        .hover\:bg-gray-300:hover { background-color: #d1d5db; }
+        input, select, textarea { outline: none; }
+        input:focus, select:focus, textarea:focus { 
+            box-shadow: 0 0 0 2px #3b82f6; 
+            border-color: #3b82f6; 
+        }
+        button { outline: none; cursor: pointer; border: none; }
+        .relative { position: relative; }
+        .absolute { position: absolute; }
+        .fixed { position: fixed; }
+        .inset-0 { top: 0; right: 0; bottom: 0; left: 0; }
+        .left-4 { left: 1rem; }
+        .top-1\/2 { top: 50%; }
+        .transform { transform: translateY(-50%); }
+        .z-50 { z-index: 50; }
+        .bg-black { background-color: black; }
+        .bg-opacity-50 { background-color: rgba(0,0,0,0.5); }
+        .max-w-lg { max-width: 32rem; }
+        .w-full { width: 100%; }
+        .flex-1 { flex: 1; }
+        .block { display: block; }
+        .mx-auto { margin-left: auto; margin-right: auto; }
+        .text-center { text-align: center; }
+        .truncate { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .max-w-xs { max-width: 20rem; }
+        .space-y-2 > * + * { margin-top: 0.5rem; }
+        .space-y-5 > * + * { margin-top: 1.25rem; }
+        
+        @media (min-width: 768px) {
+            .md\:grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        }
+        
+        @media (min-width: 1024px) {
+            .lg\:grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+        }
     </style>
 </head>
 <body>
@@ -17,50 +148,7 @@
 
     <script type="text/babel">
         const { useState, useEffect } = React;
-
-        // Simple icon components
-        const Search = ({size = 20, className = ""}) => (
-            <svg className={className} width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <circle cx="11" cy="11" r="8"></circle>
-                <path d="m21 21-4.35-4.35"></path>
-            </svg>
-        );
-
-        const AlertCircle = ({size = 20, className = ""}) => (
-            <svg className={className} width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <circle cx="12" cy="12" r="10"></circle>
-                <line x1="12" y1="8" x2="12" y2="12"></line>
-                <line x1="12" y1="16" x2="12.01" y2="16"></line>
-            </svg>
-        );
-
-        const CheckCircle = ({size = 20, className = ""}) => (
-            <svg className={className} width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
-                <polyline points="22 4 12 14.01 9 11.01"></polyline>
-            </svg>
-        );
-
-        const Download = ({size = 20, className = ""}) => (
-            <svg className={className} width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                <polyline points="7 10 12 15 17 10"></polyline>
-                <line x1="12" y1="15" x2="12" y2="3"></line>
-            </svg>
-        );
-
-        const Settings = ({size = 20, className = ""}) => (
-            <svg className={className} width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <circle cx="12" cy="12" r="3"></circle>
-                <path d="M12 1v6m0 6v6m5.2-13.2 4.2 4.2m-13.4 0-4.2-4.2m18.4 9-4.2-4.2m0 13.4 4.2 4.2m-18.4 0 4.2-4.2"></path>
-            </svg>
-        );
-
-        const Plane = ({size = 20, className = ""}) => (
-            <svg className={className} width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <path d="M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z"></path>
-            </svg>
-        );
+        const { Search, AlertCircle, CheckCircle, Download, Settings, Plane } = lucide;
 
         function EPSUpdateSystem() {
             const [components, setComponents] = useState([]);
@@ -111,16 +199,11 @@
             }, []);
 
             const loadData = () => {
-                try {
-                    const stored = localStorage.getItem('eps-components-github');
-                    if (stored) {
-                        setComponents(JSON.parse(stored));
-                    } else {
-                        localStorage.setItem('eps-components-github', JSON.stringify(initialData));
-                        setComponents(initialData);
-                    }
-                } catch (error) {
-                    console.error('Error loading data:', error);
+                const stored = localStorage.getItem('eps-components-github');
+                if (stored) {
+                    setComponents(JSON.parse(stored));
+                } else {
+                    localStorage.setItem('eps-components-github', JSON.stringify(initialData));
                     setComponents(initialData);
                 }
                 setLoading(false);
@@ -217,20 +300,20 @@
 
             if (loading) {
                 return (
-                    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center">
+                    <div className="min-h-screen bg-gradient flex items-center" style={{justifyContent:'center'}}>
                         <div className="text-lg text-gray-600">Loading...</div>
                     </div>
                 );
             }
 
             return (
-                <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
-                    <div className="max-w-6xl mx-auto">
-                        <div className="bg-white rounded-2xl shadow-xl p-6 mb-6">
+                <div className="min-h-screen bg-gradient p-4">
+                    <div className="container">
+                        <div className="card card-lg mb-6">
                             <div className="flex justify-between items-center mb-6">
                                 <div>
                                     <h1 className="text-3xl font-bold text-gray-800 flex items-center gap-3">
-                                        <Settings size={32} className="text-blue-600" />
+                                        <Settings className="text-blue-600" size={32} />
                                         EPS Serviceability System
                                     </h1>
                                     <p className="text-gray-600 mt-1">Update component status quickly and easily</p>
@@ -245,15 +328,15 @@
                             </div>
 
                             <div className="grid grid-cols-3 gap-4 mb-6">
-                                <div className="bg-gradient-to-br from-blue-500 to-blue-600 text-white p-5 rounded-xl shadow-lg">
+                                <div className="bg-gradient-blue text-white p-5 rounded-xl shadow-lg">
                                     <div className="text-sm font-medium opacity-90">Total Components</div>
                                     <div className="text-4xl font-bold mt-2">{stats.total}</div>
                                 </div>
-                                <div className="bg-gradient-to-br from-green-500 to-green-600 text-white p-5 rounded-xl shadow-lg">
+                                <div className="bg-gradient-green text-white p-5 rounded-xl shadow-lg">
                                     <div className="text-sm font-medium opacity-90">Serviceable</div>
                                     <div className="text-4xl font-bold mt-2">{stats.serviceable}</div>
                                 </div>
-                                <div className="bg-gradient-to-br from-red-500 to-red-600 text-white p-5 rounded-xl shadow-lg">
+                                <div className="bg-gradient-red text-white p-5 rounded-xl shadow-lg">
                                     <div className="text-sm font-medium opacity-90">Unserviceable</div>
                                     <div className="text-4xl font-bold mt-2">{stats.unserviceable}</div>
                                 </div>
@@ -261,21 +344,19 @@
 
                             <div className="flex gap-4">
                                 <div className="flex-1 relative">
-                                    <div className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400">
-                                        <Search size={20} />
-                                    </div>
+                                    <Search className="absolute left-4 top-1/2 transform text-gray-400" size={20} />
                                     <input
                                         type="text"
                                         placeholder="Search by EPS Serial or Aircraft No..."
                                         value={searchTerm}
                                         onChange={(e) => setSearchTerm(e.target.value)}
-                                        className="w-full pl-12 pr-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
+                                        className="w-full pl-12 pr-4 py-3 border-2 border-gray-200 rounded-xl transition"
                                     />
                                 </div>
                                 <select
                                     value={filter}
                                     onChange={(e) => setFilter(e.target.value)}
-                                    className="px-6 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition font-medium"
+                                    className="px-6 py-3 border-2 border-gray-200 rounded-xl transition font-medium"
                                 >
                                     <option value="all">All Status</option>
                                     <option value="serviceable">✓ Serviceable</option>
@@ -294,7 +375,7 @@
                             {filteredComponents.map((comp) => (
                                 <div
                                     key={comp.no}
-                                    className="bg-white rounded-xl shadow-lg hover:shadow-xl transition p-5 cursor-pointer border-2 border-transparent hover:border-blue-300"
+                                    className="card shadow-lg hover:shadow-xl transition p-5 cursor-pointer border-2 border-transparent hover:border-blue-300"
                                     onClick={() => openUpdateForm(comp)}
                                 >
                                     <div className="flex justify-between items-start mb-3">
@@ -337,118 +418,4 @@
                                     )}
 
                                     {comp.lastUpdated && (
-                                        <div className="mt-2 text-xs text-gray-400">
-                                            Updated: {comp.lastUpdated}
-                                        </div>
-                                    )}
-                                </div>
-                            ))}
-                        </div>
-
-                        {filteredComponents.length === 0 && (
-                            <div className="bg-white rounded-xl shadow-lg p-12 text-center">
-                                <div className="mx-auto text-gray-300 mb-4">
-                                    <Search size={48} />
-                                </div>
-                                <p className="text-gray-500 text-lg">No components found</p>
-                            </div>
-                        )}
-                    </div>
-
-                    {showUpdateForm && selectedComponent && (
-                        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-                            <div className="bg-white rounded-2xl shadow-2xl max-w-lg w-full p-8">
-                                <h2 className="text-2xl font-bold text-gray-800 mb-6">
-                                    Update EPS {selectedComponent.epsSerial}
-                                </h2>
-
-                                <div className="space-y-5">
-                                    <div>
-                                        <label className="block text-sm font-semibold text-gray-700 mb-2">
-                                            Component Status *
-                                        </label>
-                                        <div className="grid grid-cols-2 gap-3">
-                                            <button
-                                                onClick={() => setUpdateData({...updateData, status: 'serviceable'})}
-                                                className={`p-4 rounded-xl border-2 font-semibold transition ${
-                                                    updateData.status === 'serviceable'
-                                                        ? 'bg-green-50 border-green-500 text-green-700'
-                                                        : 'border-gray-200 text-gray-600 hover:border-green-300'
-                                                }`}
-                                            >
-                                                <div className="mx-auto mb-2"><CheckCircle size={24} /></div>
-                                                Serviceable
-                                            </button>
-                                            <button
-                                                onClick={() => setUpdateData({...updateData, status: 'unserviceable'})}
-                                                className={`p-4 rounded-xl border-2 font-semibold transition ${
-                                                    updateData.status === 'unserviceable'
-                                                        ? 'bg-red-50 border-red-500 text-red-700'
-                                                        : 'border-gray-200 text-gray-600 hover:border-red-300'
-                                                }`}
-                                            >
-                                                <div className="mx-auto mb-2"><AlertCircle size={24} /></div>
-                                                Unserviceable
-                                            </button>
-                                        </div>
-                                    </div>
-
-                                    {updateData.status === 'serviceable' ? (
-                                        <div>
-                                            <label className="block text-sm font-semibold text-gray-700 mb-2">
-                                                Aircraft No *
-                                            </label>
-                                            <input
-                                                type="text"
-                                                value={updateData.aircraftNo}
-                                                onChange={(e) => setUpdateData({...updateData, aircraftNo: e.target.value})}
-                                                placeholder="e.g., M50-21"
-                                                className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
-                                            />
-                                        </div>
-                                    ) : (
-                                        <>
-                                            <div>
-                                                <label className="block text-sm font-semibold text-gray-700 mb-2">
-                                                    Sent for Repair Date *
-                                                </label>
-                                                <input
-                                                    type="text"
-                                                    value={updateData.sentForRepair}
-                                                    onChange={(e) => setUpdateData({...updateData, sentForRepair: e.target.value})}
-                                                    placeholder="DD/MM/YY"
-                                                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
-                                                />
-                                            </div>
-                                            <div>
-                                                <label className="block text-sm font-semibold text-gray-700 mb-2">
-                                                    Expected Return Date
-                                                </label>
-                                                <input
-                                                    type="text"
-                                                    value={updateData.expectedReturn}
-                                                    onChange={(e) => setUpdateData({...updateData, expectedReturn: e.target.value})}
-                                                    placeholder="DD/MM/YY"
-                                                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
-                                                />
-                                            </div>
-                                        </>
-                                    )}
-
-                                    <div>
-                                        <label className="block text-sm font-semibold text-gray-700 mb-2">
-                                            Remarks
-                                        </label>
-                                        <textarea
-                                            value={updateData.remarks}
-                                            onChange={(e) => setUpdateData({...updateData, remarks: e.target.value})}
-                                            rows={3}
-                                            className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
-                                        />
-                                    </div>
-                                </div>
-
-                                <div className="flex gap-3 mt-8">
-                                    <button
-                                        onClick={saveUpdate}
-                                        className="flex-1 bg-blue-600 text-white py-3 rounded-xl font-semibold hover:bg-blue-700 transition shadow-lg"
+                                        <div className="mt-2 text-xs text-
